@@ -1,9 +1,9 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
+from views import get_single_post, get_all_posts
 
-from views import get_all_orders, get_single_order, create_order, delete_order
-from views import update_metal, get_all_metals
+
 
 
 class JSONServer(HandleRequests):
@@ -11,12 +11,12 @@ class JSONServer(HandleRequests):
         response_body = ""
         url = self.parse_url(self.path)
 
-        if url["requested_resource"] == "orders":
+        if url["requested_resource"] == "posts":
             if url["pk"] != 0:
-                response_body = get_single_order(url["pk"])
+                response_body = get_single_post(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
-            response_body = get_all_orders()
+            response_body = get_all_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         elif url["requested_resource"] == "metals":
