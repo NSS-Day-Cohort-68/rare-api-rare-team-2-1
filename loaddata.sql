@@ -89,3 +89,10 @@ INSERT INTO Categories ('label') VALUES ('News');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
+INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
+VALUES 
+('John', 'Doe', 'john@example.com', 'I am a software engineer', 'john_doe', 'password123', 'john.jpg', '2024-03-04 12:00:00', true),
+('Alice', 'Smith', 'alice@example.com', 'I love coding and hiking', 'alice_smith', 'password456', 'alice.jpg', '2024-03-04 12:00:00', true),
+('Michael', 'Johnson', 'michael@example.com', 'Coffee enthusiast and web developer', 'michael_j', 'password789', 'michael.jpg', '2024-03-04 12:00:00', true),
+('Emma', 'Brown', 'emma@example.com', 'Passionate about art and design', 'emma_brown', 'passwordabc', 'emma.jpg', '2024-03-04 12:00:00', true),
+('David', 'Wilson', 'david@example.com', 'Musician and technology enthusiast', 'david_w', 'passwordxyz', 'david.jpg', '2024-03-04 12:00:00', true);
