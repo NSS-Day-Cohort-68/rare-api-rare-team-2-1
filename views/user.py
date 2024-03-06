@@ -46,7 +46,7 @@ def create_user(user):
     Returns:
         json string: Contains the token of the newly created user
     """
-    with sqlite3.connect("../db.sqlite3") as conn:
+    with sqlite3.connect("db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -73,7 +73,7 @@ def create_user(user):
 def get_all_users():
     """Gets users"""
     # Open a connection to the database
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -124,7 +124,7 @@ def get_all_users():
 
 def retrieve_user(pk):
     # Open a connection to the database
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
