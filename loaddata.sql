@@ -85,13 +85,22 @@ CREATE TABLE "Categories" (
   "label" varchar
 );
 
-INSERT INTO Categories ('label') VALUES ('News');
+INSERT INTO Categories ('label') VALUES ('‰');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
-INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
-VALUES (1, 1, 'First Post', '2024-02-15', 'https://example.com/image1.jpg', 'This is the content of the first post.', 1);
+
+INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
+VALUES 
+('John', 'Doe', 'john@example.com', 'I am a software engineer', 'john_doe', 'password123', 'john.jpg', '2024-03-04 12:00:00', true),
+('Alice', 'Smith', 'alice@example.com', 'I love coding and hiking', 'alice_smith', 'password456', 'alice.jpg', '2024-03-04 12:00:00', true),
+('Michael', 'Johnson', 'michael@example.com', 'Coffee enthusiast and web developer', 'michael_j', 'password789', 'michael.jpg', '2024-03-04 12:00:00', true),
+('Emma', 'Brown', 'emma@example.com', 'Passionate about art and design', 'emma_brown', 'passwordabc', 'emma.jpg', '2024-03-04 12:00:00', true),
+('David', 'Wilson', 'david@example.com', 'Musician and technology enthusiast', 'david_w', 'passwordxyz', 'david.jpg', '2024-03-04 12:00:00', true);
 
 INSERT INTO Posts (user_id, category_id, title, publication_date, image_url, content, approved)
-VALUES (2, 2, 'Second Post', '2024-02-16', 'https://example.com/image2.jpg', 'This is the content of the second post.', 1);
+VALUES
+(1, 1, 'Title of Post 1', '2024-03-06', 'image1.jpg', 'Content of Post 1', true),
+(2, 2, 'Title of Post 2', '2024-03-06', 'image2.jpg', 'Content of Post 2', true),
+(1, 1, 'Title of Post 3', '2024-03-06', 'image3.jpg', 'Content of Post 3', false);
 

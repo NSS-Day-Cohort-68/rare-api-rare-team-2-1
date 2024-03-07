@@ -38,6 +38,38 @@ def get_all_posts():
 
     return serialized_posts
 
+def get_posts_by_user_id(user_id):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+        SELECT
+            p.title AS post_title,
+            u.username AS author,
+            c.label AS category
+        FROM Posts p
+        INNER JOIN Users u ON p.user_id = u.id
+        INNER JOIN Categories c ON p.category_id = c.id
+        WHERE p.user_id = ?;
+        """,
+            (user_id,),
+        )
+        query_results = db_cursor.fetchall()
+
+        posts = []
+        for row in query_results:
+            post = {
+                "title": row["post_title"],
+                "author": row["author"],
+                "category": row["category"],
+            }
+            posts.append(post)
+
+        serialized_posts = json.dumps(posts)
+
+    return serialized_posts
 
 def get_single_post(pk):
     # Open a connection to the database
