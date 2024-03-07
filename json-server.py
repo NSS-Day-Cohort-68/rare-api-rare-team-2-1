@@ -1,6 +1,7 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
+from views import get_single_post, get_all_posts
 from views import get_all_users, retrieve_user, get_all_posts, get_posts_by_user_id
 
 
@@ -9,17 +10,21 @@ class JSONServer(HandleRequests):
     def do_GET(self):
         response_body = ""
         url = self.parse_url(self.path)
+        if url["requested_resource"] == "posts":
+            if url["pk"] != 0:
+                response_body = get_single_post(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+            response_body = get_all_posts()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+            
         if url["requested_resource"] == "users":
             if url["pk"] != 0:
                 response_body = retrieve_user(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
             response_body = get_all_users()
-            return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
-        if url["requested_resource"] == "posts":
-            response_body = get_all_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         if url["requested_resource"] == "myposts":

@@ -89,6 +89,7 @@ INSERT INTO Categories ('label') VALUES ('‰');
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
+
 INSERT INTO Users (first_name, last_name, email, bio, username, password, profile_image_url, created_on, active)
 VALUES 
 ('John', 'Doe', 'john@example.com', 'I am a software engineer', 'john_doe', 'password123', 'john.jpg', '2024-03-04 12:00:00', true),
@@ -102,3 +103,4 @@ VALUES
 (1, 1, 'Title of Post 1', '2024-03-06', 'image1.jpg', 'Content of Post 1', true),
 (2, 2, 'Title of Post 2', '2024-03-06', 'image2.jpg', 'Content of Post 2', true),
 (1, 1, 'Title of Post 3', '2024-03-06', 'image3.jpg', 'Content of Post 3', false);
+

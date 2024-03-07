@@ -1,7 +1,6 @@
 import sqlite3
 import json
 
-
 def get_all_posts():
     # Open a connection to the database
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -26,11 +25,11 @@ def get_all_posts():
         posts = []
         for row in query_results:
             post = {
-                "title": row["title"],
-                "publication_date": row["publication_date"],
-                "image_url": row["image_url"],
-                "content": row["content"],
-                "approved": row["approved"],
+                'title': row['title'],
+                'publication_date': row['publication_date'],
+                'image_url': row['image_url'],
+                'content': row['content'],
+                'approved': row['approved']
             }
             posts.append(post)
 
@@ -38,7 +37,6 @@ def get_all_posts():
         serialized_posts = json.dumps(posts)
 
     return serialized_posts
-
 
 def get_posts_by_user_id(user_id):
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -72,7 +70,6 @@ def get_posts_by_user_id(user_id):
         serialized_posts = json.dumps(posts)
 
     return serialized_posts
-
 
 def get_single_post(pk):
     # Open a connection to the database
