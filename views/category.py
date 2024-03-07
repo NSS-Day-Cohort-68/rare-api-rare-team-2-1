@@ -25,3 +25,56 @@ def create_category(category):
         id = db_cursor.lastrowid
 
         return json.dumps({"id": id})
+
+
+def get_all_categories():
+    """Gets categories"""
+    # Open a connection to the database
+    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+            SELECT
+               id,
+               label
+            FROM Categories
+            """
+        )
+
+        query_results = db_cursor.fetchall()
+
+        # Initialize a list to hold categories
+        categories = []
+
+        # Iterate through query results and construct dictionaries for each category
+        for row in query_results:
+            category = {
+                "id": row["id"],
+                "label": row["label"],
+            }
+            categories.append(category)
+
+        # Serialize Python list of users to JSON encoded string
+        serialized_categories = json.dumps(categories)
+
+        return serialized_categories
+
+
+def delete_category(pk):
+    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        DELETE FROM Categories WHERE id = ?
+        """,
+            (pk,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+    return True if number_of_rows_deleted > 0 else False

@@ -8,7 +8,13 @@ from views import (
     retrieve_user_by_username,
     get_posts_by_user_id,
 )
-from views import get_single_post, get_all_posts, create_category
+from views import (
+    get_single_post,
+    get_all_posts,
+    create_category,
+    get_all_categories,
+    delete_category,
+)
 
 
 class JSONServer(HandleRequests):
@@ -63,6 +69,10 @@ class JSONServer(HandleRequests):
             response_body = get_posts_by_user_id(1)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+        if url["requested_resource"] == "categories":
+            response_body = get_all_categories()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
         return self.response(
             "404", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
         )
@@ -91,6 +101,25 @@ class JSONServer(HandleRequests):
         else:
             return self.response(
                 "Not found", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
+            )
+
+    def do_DELETE(self):
+        """Handle DELETE requests from a client"""
+
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+        if url["requested_resource"] == "categories":
+            if pk != 0:
+                successfully_deleted = delete_category(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+            return self.response(
+                "Requested resource not found",
+                status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
             )
 
 
