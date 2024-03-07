@@ -1,10 +1,14 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
-from views import get_all_users, retrieve_user, login_user, retrieve_user_by_username, get_posts_by_user_id
+from views import (
+    get_all_users,
+    retrieve_user,
+    login_user,
+    retrieve_user_by_username,
+    get_posts_by_user_id,
+)
 from views import get_single_post, get_all_posts
-
-
 
 
 class JSONServer(HandleRequests):
@@ -19,7 +23,7 @@ class JSONServer(HandleRequests):
 
             response_body = get_all_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
-            
+
         if url["requested_resource"] == "users":
             if "pk" in url:
                 if url["pk"] != 0:
@@ -56,7 +60,7 @@ class JSONServer(HandleRequests):
 
         if url["requested_resource"] == "myposts":
             # need to change this to pass in the userId
-            response_body = get_posts_by_user_id(1)
+            response_body = get_posts_by_user_id(user_id)
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         return self.response(
