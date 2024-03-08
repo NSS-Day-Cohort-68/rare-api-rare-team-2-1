@@ -13,7 +13,8 @@ def login_user(user):
         json string: If the user was found will return valid boolean of True and the user's id as the token
                      If the user was not found will return valid boolean False
     """
-    with sqlite3.connect("../db.sqlite3") as conn:
+
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -30,7 +31,12 @@ def login_user(user):
         user_from_db = db_cursor.fetchone()
 
         if user_from_db is not None:
-            response = {"valid": True, "token": user_from_db["id"]}
+            response = {
+                "valid": True,
+                "token": user_from_db["id"],
+                "id": user_from_db["id"],
+                "username": user_from_db["username"],
+            }
         else:
             response = {"valid": False}
 
@@ -46,7 +52,10 @@ def create_user(user):
     Returns:
         json string: Contains the token of the newly created user
     """
-    with sqlite3.connect("db.sqlite3") as conn:
+
+
+    with sqlite3.connect("./db.sqlite3") as conn:
+
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -126,7 +135,7 @@ def get_all_users():
 
 def retrieve_user(pk):
     # Open a connection to the database
-    with sqlite3.connect("db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -175,6 +184,7 @@ def retrieve_user(pk):
             serialized_user = "{}"
 
         return serialized_user
+
 
 
 def retrieve_user_by_email(email):
@@ -228,3 +238,37 @@ def retrieve_user_by_email(email):
             serialized_user = "{}"
 
         return serialized_user
+
+
+def retrieve_user_by_username(username):
+    # Open a connection to the database
+    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Execute the SQL query to retrieve the user by username
+        db_cursor.execute(
+            """
+            SELECT *
+            FROM Users
+            WHERE username = ?
+            """,
+            (username,),
+        )
+
+        # Fetch the query results
+        query_result = db_cursor.fetchone()
+
+        # Check if a user was found
+        if query_result is not None:
+            # Construct a dictionary representing the user
+            user = {
+                "password": query_result["password"],
+                "username": query_result["username"],
+                # Add other user attributes as needed
+            }
+            return user
+        else:
+            # If no user found with the provided username, return None
+            return None
+
