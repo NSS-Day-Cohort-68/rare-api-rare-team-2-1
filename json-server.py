@@ -14,6 +14,7 @@ from views import (
     create_category,
     get_all_categories,
     delete_category,
+    update_category,
 )
 
 
@@ -121,6 +122,26 @@ class JSONServer(HandleRequests):
                 "Requested resource not found",
                 status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
             )
+
+    def do_PUT(self):
+        """Handle PUT requests from a client"""
+
+        # Parse the URL and get the primary key
+        url = self.parse_url(self.path)
+        pk = url["pk"]
+
+        # Get the request body JSON for the new data
+        content_len = int(self.headers.get("content-length", 0))
+        request_body = self.rfile.read(content_len)
+        request_body = json.loads(request_body)
+
+        if url["requested_resource"] == "categories":
+            if pk != 0:
+                successfully_updated = update_category(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
 
 
 def main():

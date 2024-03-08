@@ -11,7 +11,7 @@ def create_category(category):
     Returns:
         json string: Contains the ID of the newly created category
     """
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -30,7 +30,7 @@ def create_category(category):
 def get_all_categories():
     """Gets categories"""
     # Open a connection to the database
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -64,7 +64,7 @@ def get_all_categories():
 
 
 def delete_category(pk):
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -78,3 +78,22 @@ def delete_category(pk):
         number_of_rows_deleted = db_cursor.rowcount
 
     return True if number_of_rows_deleted > 0 else False
+
+
+def update_category(id, category_data):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Categories
+                SET
+                    label = ?
+            WHERE id = ?
+            """,
+            (category_data["label"], id),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return True if rows_affected > 0 else False
