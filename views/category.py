@@ -81,6 +81,13 @@ def delete_category(pk):
 
 
 def update_category(id, category_data):
+    if not isinstance(category_data, dict):
+        raise ValueError("category_data must be a dictionary")
+
+    label = category_data.get("label")
+    if label is None:
+        raise ValueError("category_data must contain 'label' key")
+
     with sqlite3.connect("./db.sqlite3") as conn:
         db_cursor = conn.cursor()
 
@@ -91,9 +98,9 @@ def update_category(id, category_data):
                     label = ?
             WHERE id = ?
             """,
-            (category_data["label"], id),
+            (label, id),
         )
 
         rows_affected = db_cursor.rowcount
 
-    return True if rows_affected > 0 else False
+    return rows_affected > 0
