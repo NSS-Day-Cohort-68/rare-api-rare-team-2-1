@@ -1,12 +1,15 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
+
 from views import (
     get_all_users,
     retrieve_user,
     login_user,
     retrieve_user_by_username,
     get_posts_by_user_id,
+    retrieve_user_by_email,
+    create_user
 )
 from views import (
     get_single_post,
@@ -15,6 +18,7 @@ from views import (
     get_all_categories,
     delete_category,
 )
+
 
 
 class JSONServer(HandleRequests):
@@ -26,6 +30,7 @@ class JSONServer(HandleRequests):
             if url["pk"] != 0:
                 response_body = get_single_post(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
 
             response_body = get_all_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
@@ -58,8 +63,12 @@ class JSONServer(HandleRequests):
                         "Invalid username format",
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
-
+            elif "email" in url["query_params"]:
+              email = url["query_params"]["email"][0]
+              response_body = retrieve_user_by_email(email)
+              return self.response(response_body, status.HTTP_200_SUCCESS.value)
             # If no specific username provided, return all users
+
             response_body = get_all_users()
 
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
@@ -73,6 +82,7 @@ class JSONServer(HandleRequests):
             response_body = get_all_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+
         return self.response(
             "404", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
         )
@@ -83,11 +93,19 @@ class JSONServer(HandleRequests):
         url = self.parse_url(self.path)
         pk = url["pk"]
 
+
         content_len = int(self.headers.get("content-length", 0))
         request_body = self.rfile.read(content_len)
         request_body = json.loads(request_body)
 
-        if url["requested_resource"] == "categories":
+
+        if url["requested_resource"] == "users":
+            successfully_posted = create_user(request_body)
+            if successfully_posted:
+                return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+
+        elif url["requested_resource"] == "categories":
             if pk == 0:
                 successfully_posted = create_category(request_body)
                 if successfully_posted:
