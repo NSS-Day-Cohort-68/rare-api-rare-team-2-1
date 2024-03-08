@@ -6,12 +6,12 @@ from datetime import datetime
 def login_user(user):
     """Checks for the user in the database
 
-    Args:
-        user (dict): Contains the username and password of the user trying to login
+        Args:
+            user (dict): Contains the username and password of the user trying to login
 
-    Returns:
-        json string: If the user was found will return valid boolean of True and the user's id as the token
-                     If the user was not found will return valid boolean False
+        Returns:
+            json string: If the user was found will return valid boolean of True and the user's id as the token
+    If the user was not found will return valid boolean False
     """
 
     with sqlite3.connect("./db.sqlite3") as conn:
@@ -52,22 +52,26 @@ def create_user(user):
     Returns:
         json string: Contains the token of the newly created user
     """
+
     with sqlite3.connect("./db.sqlite3") as conn:
+
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
         db_cursor.execute(
             """
-        Insert into Users (first_name, last_name, username, email, password, bio, created_on, active) values (?, ?, ?, ?, ?, ?, ?, 1)
+        Insert into Users (first_name, last_name, username, email, password, profile_image_url, bio, created_on, active) values (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
             (
                 user["first_name"],
                 user["last_name"],
-                user["username"],
                 user["email"],
+                user["username"],
                 user["password"],
+                user["profile_image_url"],
                 user["bio"],
-                datetime.now(),
+                user["created_on"],
+                user["active"],
             ),
         )
 
@@ -180,12 +184,63 @@ def retrieve_user(pk):
 
         return serialized_user
 
-    import sqlite3
+
+def retrieve_user_by_email(email):
+    # Open a connection to the database
+    with sqlite3.connect("db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Execute the SQL query to retrieve the user with the given primary key
+        db_cursor.execute(
+            """
+            SELECT
+                u.id,
+                u.first_name,
+                u.last_name,
+                u.email,
+                u.bio,
+                u.username,
+                u.password,
+                u.profile_image_url,
+                u.created_on,
+                u.active
+            FROM Users u
+            WHERE u.email = ?
+            """,
+            (email,),
+        )
+
+        # Fetch the query results
+        query_results = db_cursor.fetchone()
+
+        # Check if query_results is not None
+        if query_results is not None:
+            # Convert query_results to dictionary
+            user = {
+                "id": query_results["id"],
+                "first_name": query_results["first_name"],
+                "last_name": query_results["last_name"],
+                "email": query_results["email"],
+                "bio": query_results["bio"],
+                "username": query_results["username"],
+                "password": query_results["password"],
+                "profile_image_url": query_results["profile_image_url"],
+                "created_on": query_results["created_on"],
+                "active": query_results["active"],
+            }
+            # Serialize Python dictionary to a JSON encoded string
+            serialized_user = json.dumps(user)
+        else:
+            # If no user found with the given primary key, return an empty JSON object
+            serialized_user = "{}"
+
+        return serialized_user
 
 
 def retrieve_user_by_username(username):
     # Open a connection to the database
-    with sqlite3.connect("./rare-api-rare-team-2-1/db.sqlite3") as conn:
+    with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 

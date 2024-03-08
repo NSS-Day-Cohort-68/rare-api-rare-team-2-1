@@ -85,7 +85,7 @@ CREATE TABLE "Categories" (
   "label" varchar
 );
 
-INSERT INTO Categories ('label') VALUES ('‰');
+INSERT INTO Categories ('label', 'id') VALUES ('yes', 2);
 INSERT INTO Tags ('label') VALUES ('JavaScript');
 INSERT INTO Reactions ('label', 'image_url') VALUES ('happy', 'https://pngtree.com/so/happy');
 
