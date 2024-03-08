@@ -1,6 +1,15 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
+from views import (
+    get_all_users,
+    retrieve_user,
+    login_user,
+    retrieve_user_by_username,
+    get_posts_by_user_id,
+)
+from views import get_single_post, get_all_posts
+
 
 from views import (
     get_all_users,
@@ -19,18 +28,23 @@ from views import (
     delete_category,
 )
 
-
-
 class JSONServer(HandleRequests):
 
     def do_GET(self):
+
         response_body = ""
         url = self.parse_url(self.path)
+
         if url["requested_resource"] == "posts":
             if url["pk"] != 0:
                 response_body = get_single_post(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+            elif "user_Id" in url["query_params"]:
+                user_id = int(url["query_params"]["user_Id"][0])
+
+                response_body = get_posts_by_user_id(user_id)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
             response_body = get_all_posts()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
@@ -72,6 +86,7 @@ class JSONServer(HandleRequests):
             response_body = get_all_users()
 
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
 
         if url["requested_resource"] == "myposts":
             # need to change this to pass in the userId
