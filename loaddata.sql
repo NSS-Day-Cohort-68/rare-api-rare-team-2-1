@@ -70,6 +70,7 @@ CREATE TABLE "Comments" (
   "post_id" INTEGER,
   "author_id" INTEGER,
   "content" varchar,
+  "created_on" date,
   FOREIGN KEY(`post_id`) REFERENCES `Posts`(`id`),
   FOREIGN KEY(`author_id`) REFERENCES `Users`(`id`)
 );
@@ -129,6 +130,4 @@ VALUES
 (2, 2, 'Title of Post 2', '2024-03-06', 'image2.jpg', 'Content of Post 2', true),
 (1, 1, 'Title of Post 3', '2024-03-06', 'image3.jpg', 'Content of Post 3', false);
 
-INSERT INTO Comments (post_id, author_id, content) VALUES (1, 3, 'Great post!');
-INSERT INTO Comments (post_id, author_id, content) VALUES (2, 1, 'Interesting read.');
-INSERT INTO Comments (post_id, author_id, content) VALUES (3, 4, 'Well said!');
+INSERT INTO Comments (post_id, author_id, content, created_on) VALUES (2, 1, 'Interesting read.', DATETIME('now'));
