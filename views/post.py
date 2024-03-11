@@ -101,3 +101,42 @@ def get_single_post(pk):
         serialized_order = json.dumps(dict(query_result))
 
     return serialized_order
+
+
+def get_all_posts_with_user_and_category():
+    # Open a connection to the database
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want with joins
+        db_cursor.execute(
+            """
+            SELECT
+                p.title,
+                p.publication_date,
+                p.image_url,
+                p.content,
+                p.approved,
+                u.username AS author_username,
+                c.label AS category_name
+            FROM Posts p
+            LEFT JOIN Users u ON p.user_id = u.id
+            LEFT JOIN Categories c ON p.category_id = c.id;
+            """
+        )
+        query_results = db_cursor.fetchall()
+
+        posts = []
+        for row in query_results:
+            post = {
+                "title": row["title"],
+                "author": row["author_username"],
+                "category": row["category_name"],
+                "content": row["content"],
+            }
+            posts.append(post)
+
+        serialized_posts = json.dumps(posts)
+
+    return serialized_posts

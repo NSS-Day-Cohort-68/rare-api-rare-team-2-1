@@ -28,6 +28,7 @@ from views import (
     delete_category,
     update_category,
     create_tag,
+    get_all_posts_with_user_and_category,
 )
 
 
@@ -47,6 +48,10 @@ class JSONServer(HandleRequests):
                 user_id = int(url["query_params"]["user_Id"][0])
 
                 response_body = get_posts_by_user_id(user_id)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+            elif "_expand" in url["query_params"]:
+                response_body = get_all_posts_with_user_and_category()
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
             response_body = get_all_posts()
