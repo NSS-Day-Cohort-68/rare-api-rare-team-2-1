@@ -11,6 +11,7 @@ from .post import (
     get_posts_by_user_id,
     get_single_post,
     get_all_posts_with_user_and_category,
+    create_post,
 )
 from .category import (
     create_category,

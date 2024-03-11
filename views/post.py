@@ -140,3 +140,37 @@ def get_all_posts_with_user_and_category():
         serialized_posts = json.dumps(posts)
 
     return serialized_posts
+
+
+def create_post(post):
+    """Adds a post to the database
+
+    Args:
+        post (dictionary): The dictionary containing the post information including category_id and user_id
+
+    Returns:
+        json string: Contains the ID of the newly created post
+    """
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            INSERT INTO Posts (title, publication_date, image_url, content, approved, category_id, user_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                post["title"],
+                post["publication_date"],
+                post["image_url"],
+                post["content"],
+                post["approved"],
+                post["category_id"],
+                post["user_id"],
+            ),
+        )
+
+        id = db_cursor.lastrowid
+
+        return json.dumps({"id": id})
