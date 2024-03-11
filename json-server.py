@@ -14,17 +14,15 @@ from views import (
     get_single_post,
     get_all_posts,
     get_posts_by_user_id,
+    get_all_posts_with_user_and_category,
 )
 from views import (
     create_category,
     get_all_categories,
     delete_category,
     update_category,
-    create_tag,
-    get_all_posts_with_user_and_category,
 )
-
-
+from views import create_tag
 from views import create_comment
 
 
