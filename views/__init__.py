@@ -13,3 +13,4 @@ from .category import (
     delete_category,
     update_category,
 )
+from .comment import create_comment

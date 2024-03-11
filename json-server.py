@@ -22,6 +22,8 @@ from views import (
     update_category,
 )
 
+from views import create_comment
+
 
 class JSONServer(HandleRequests):
 
@@ -120,6 +122,10 @@ class JSONServer(HandleRequests):
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
                 )
+        elif url["requested_resource"] == "comments":
+            successfully_posted = create_comment(request_body)
+            if successfully_posted:
+                return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
         else:
             return self.response(
