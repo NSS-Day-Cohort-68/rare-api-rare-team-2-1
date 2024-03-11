@@ -20,7 +20,10 @@ from views import (
     get_all_categories,
     delete_category,
     update_category,
+    create_tag,
+    get_all_posts_with_user_and_category,
 )
+
 
 from views import create_comment
 
@@ -41,6 +44,10 @@ class JSONServer(HandleRequests):
                 user_id = int(url["query_params"]["user_Id"][0])
 
                 response_body = get_posts_by_user_id(user_id)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+            elif "_expand" in url["query_params"]:
+                response_body = get_all_posts_with_user_and_category()
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
             response_body = get_all_posts()
@@ -75,6 +82,9 @@ class JSONServer(HandleRequests):
                         status.HTTP_400_CLIENT_ERROR_BAD_REQUEST_DATA.value,
                     )
             elif "email" in url["query_params"]:
+                email = url["query_params"]["email"][0]
+                response_body = retrieve_user_by_email(email)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
                 email = url["query_params"]["email"][0]
                 response_body = retrieve_user_by_email(email)
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
@@ -115,6 +125,16 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "categories":
             if pk == 0:
                 successfully_posted = create_category(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+        elif url["requested_resource"] == "createtag":
+            if pk == 0:
+                successfully_posted = create_tag(request_body)
                 if successfully_posted:
                     return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
