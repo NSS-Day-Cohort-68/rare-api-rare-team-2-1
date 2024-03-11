@@ -1,3 +1,26 @@
+DELETE FROM Users
+-- WHERE id BETWEEN ? AND ?;
+DELETE FROM DemotionQueue;
+DELETE FROM Subscriptions;
+DELETE FROM Posts;
+DELETE FROM Comments;
+DELETE FROM Reactions;
+DELETE FROM PostReactions;
+DELETE FROM Tags;
+DELETE FROM PostTags;
+DELETE FROM Categories;
+
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS DemotionQueue;
+DROP TABLE IF EXISTS Subscriptions;
+DROP TABLE IF EXISTS Posts;
+DROP TABLE IF EXISTS Comments;
+DROP TABLE IF EXISTS Reactions;
+DROP TABLE IF EXISTS PostReactions;
+DROP TABLE IF EXISTS Tags;
+DROP TABLE IF EXISTS PostTags;
+DROP TABLE IF EXISTS Categories;
+
 CREATE TABLE "Users" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "first_name" varchar,
@@ -104,3 +127,6 @@ VALUES
 (2, 2, 'Title of Post 2', '2024-03-06', 'image2.jpg', 'Content of Post 2', true),
 (1, 1, 'Title of Post 3', '2024-03-06', 'image3.jpg', 'Content of Post 3', false);
 
+INSERT INTO Comments (post_id, author_id, content) VALUES (1, 3, 'Great post!');
+INSERT INTO Comments (post_id, author_id, content) VALUES (2, 1, 'Interesting read.');
+INSERT INTO Comments (post_id, author_id, content) VALUES (3, 4, 'Well said!');
