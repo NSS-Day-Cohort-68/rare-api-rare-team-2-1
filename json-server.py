@@ -27,6 +27,7 @@ from views import (
     get_all_categories,
     delete_category,
     update_category,
+    create_tag,
     get_all_posts_with_user_and_category,
 )
 
@@ -125,6 +126,16 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "categories":
             if pk == 0:
                 successfully_posted = create_category(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+        elif url["requested_resource"] == "createtag":
+            if pk == 0:
+                successfully_posted = create_tag(request_body)
                 if successfully_posted:
                     return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
