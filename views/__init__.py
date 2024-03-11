@@ -13,3 +13,5 @@ from .category import (
     delete_category,
     update_category,
 )
+
+from .tag import create_tag
