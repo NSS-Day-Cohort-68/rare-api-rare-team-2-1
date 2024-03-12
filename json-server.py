@@ -9,6 +9,16 @@ from views import (
     get_posts_by_user_id,
     retrieve_user_by_email,
     create_user,
+    retrieve_user_by_email,
+    create_user,
+)
+from views import (
+    get_single_post,
+    get_all_posts,
+    get_posts_by_user_id,
+    get_all_posts_with_user_and_category,
+)
+from views import (
     create_category,
     get_all_categories,
     delete_category,
@@ -18,6 +28,8 @@ from views import (
     get_all_posts,
     create_post,
 )
+from views import create_tag
+from views import create_comment
 
 
 class JSONServer(HandleRequests):
@@ -77,6 +89,9 @@ class JSONServer(HandleRequests):
                 email = url["query_params"]["email"][0]
                 response_body = retrieve_user_by_email(email)
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
+                email = url["query_params"]["email"][0]
+                response_body = retrieve_user_by_email(email)
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
             # If no specific username provided, return all users
 
             response_body = get_all_users()
@@ -127,6 +142,20 @@ class JSONServer(HandleRequests):
                     "Requested resource not found",
                     status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
                 )
+        elif url["requested_resource"] == "createtag":
+            if pk == 0:
+                successfully_posted = create_tag(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
+        elif url["requested_resource"] == "comments":
+            successfully_posted = create_comment(request_body)
+            if successfully_posted:
+                return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
         else:
             return self.response(

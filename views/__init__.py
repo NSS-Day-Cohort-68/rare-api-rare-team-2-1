@@ -19,3 +19,6 @@ from .category import (
     delete_category,
     update_category,
 )
+
+from .tag import create_tag
+from .comment import create_comment
