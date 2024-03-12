@@ -20,3 +20,4 @@ from .category import (
 )
 
 from .tag import create_tag
+from .comment import create_comment
