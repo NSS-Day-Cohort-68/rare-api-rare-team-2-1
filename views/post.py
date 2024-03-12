@@ -83,15 +83,17 @@ def get_single_post(pk):
         # Write the SQL query to get the information you want
         db_cursor.execute(
             """
-        SELECT
-            p.id,
-            p.title,
-            p.publication_date,
-            p.image_url,
-            p.content,
-            p.approved
-        FROM Posts p
-        WHERE p.id = ?;
+            SELECT
+                p.id,
+                p.title,
+                p.publication_date,
+                p.image_url,
+                p.content,
+                p.approved,
+                u.username AS author_username
+            FROM Posts p
+            JOIN Users u ON p.user_id = u.id
+            WHERE p.id = ?;
         """,
             (pk,),
         )
@@ -174,3 +176,40 @@ def create_post(post):
         id = db_cursor.lastrowid
 
         return json.dumps({"id": id})
+
+def update_post(post):
+    """Updates a post in the database
+
+    Args:
+        post (dictionary): The dictionary containing the post information including category_id and user_id
+
+    Returns:
+        json string: Contains the ID of the updated post
+    """
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Posts 
+            SET title = ?, 
+                publication_date = ?, 
+                image_url = ?, 
+                content = ?, 
+                approved = ?, 
+                category_id = ? 
+            WHERE id = ?;
+            """,
+            (
+                post["title"],
+                post["publication_date"],
+                post["image_url"],
+                post["content"],
+                post["approved"],
+                post["category_id"],
+                post["id"],  # Specify the ID of the post to update
+            ),
+        )
+
+        return json.dumps({"id": post["id"]})
