@@ -21,6 +21,7 @@ from views import (
     delete_post,
     get_single_post,
     get_all_posts,
+    get_tags_by_post_id,
 )
 
 
@@ -82,9 +83,13 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         if url["requested_resource"] == "myposts":
-            response_body = get_posts_by_user_id(1)
+            response_body = get_posts_by_user_id(url["pk"])
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+        if url["requested_resource"] == "tags":
+            if url["pk"] != 0:
+                response_body = get_tags_by_post_id(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
         if url["requested_resource"] == "categories":
             response_body = get_all_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
