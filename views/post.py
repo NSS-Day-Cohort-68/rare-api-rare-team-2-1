@@ -48,6 +48,7 @@ def get_posts_by_user_id(user_id):
         db_cursor.execute(
             """
         SELECT
+            p.id,
             p.title AS post_title,
             u.username AS author,
             c.label AS category
@@ -63,6 +64,7 @@ def get_posts_by_user_id(user_id):
         posts = []
         for row in query_results:
             post = {
+                "id": row["id"],
                 "title": row["post_title"],
                 "author": row["author"],
                 "category": row["category"],
@@ -113,6 +115,7 @@ def get_all_posts_with_user_and_category():
         db_cursor.execute(
             """
             SELECT
+                p.id,
                 p.title,
                 p.publication_date,
                 p.image_url,
@@ -130,6 +133,7 @@ def get_all_posts_with_user_and_category():
         posts = []
         for row in query_results:
             post = {
+                "id": row["id"],
                 "title": row["title"],
                 "author": row["author_username"],
                 "category": row["category_name"],
@@ -140,3 +144,20 @@ def get_all_posts_with_user_and_category():
         serialized_posts = json.dumps(posts)
 
     return serialized_posts
+
+
+def delete_post(pk):
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        DELETE FROM Posts WHERE id = ?
+        """,
+            (pk,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+    return True if number_of_rows_deleted > 0 else False

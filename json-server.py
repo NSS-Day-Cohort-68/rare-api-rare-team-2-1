@@ -29,6 +29,7 @@ from views import (
     update_category,
     create_tag,
     get_all_posts_with_user_and_category,
+    delete_post,
 )
 
 
@@ -158,6 +159,14 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "categories":
             if pk != 0:
                 successfully_deleted = delete_category(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+        if url["requested_resource"] == "posts":
+            if pk != 0:
+                successfully_deleted = delete_post(pk)
                 if successfully_deleted:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
