@@ -12,6 +12,8 @@ from .post import (
     get_single_post,
     get_all_posts_with_user_and_category,
     delete_post,
+    create_post,
+
 )
 from .category import (
     create_category,
@@ -21,3 +23,4 @@ from .category import (
 )
 
 from .tag import create_tag
+from .comment import create_comment

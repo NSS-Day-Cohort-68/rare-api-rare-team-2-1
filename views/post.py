@@ -147,6 +147,14 @@ def get_all_posts_with_user_and_category():
 
 
 def delete_post(pk):
+    """Adds a post to the database
+
+    Args:
+        post (dictionary): The dictionary containing the post information including category_id and user_id
+
+    Returns:
+        json string: Contains the ID of the newly created post
+    """
     with sqlite3.connect("./db.sqlite3") as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
@@ -161,3 +169,23 @@ def delete_post(pk):
         number_of_rows_deleted = db_cursor.rowcount
 
     return True if number_of_rows_deleted > 0 else False
+
+        db_cursor.execute(
+            """
+            INSERT INTO Posts (title, publication_date, image_url, content, approved, category_id, user_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                post["title"],
+                post["publication_date"],
+                post["image_url"],
+                post["content"],
+                post["approved"],
+                post["category_id"],
+                post["user_id"],
+            ),
+        )
+
+        id = db_cursor.lastrowid
+
+        return json.dumps({"id": id})
