@@ -22,3 +22,4 @@ from .category import (
 
 from .tag import create_tag
 from .comment import create_comment
+from .postTags import create_post_tags
