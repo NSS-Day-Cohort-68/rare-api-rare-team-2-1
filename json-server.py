@@ -170,7 +170,7 @@ class JSONServer(HandleRequests):
                 if successfully_deleted:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
-
+                    )
 
         if url["requested_resource"] == "posts":
             if pk != 0:
