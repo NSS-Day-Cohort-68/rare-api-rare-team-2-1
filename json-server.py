@@ -1,12 +1,14 @@
 import json
 from http.server import HTTPServer
 from nss_handler import HandleRequests, status
-
 from views import (
     get_all_users,
     retrieve_user,
     login_user,
     retrieve_user_by_username,
+    get_posts_by_user_id,
+    retrieve_user_by_email,
+    create_user,
     retrieve_user_by_email,
     create_user,
 )
@@ -21,6 +23,10 @@ from views import (
     get_all_categories,
     delete_category,
     update_category,
+    get_all_posts_with_user_and_category,
+    get_single_post,
+    get_all_posts,
+    create_post,
 )
 from views import create_tag
 from views import create_comment
@@ -123,6 +129,12 @@ class JSONServer(HandleRequests):
         elif url["requested_resource"] == "categories":
             if pk == 0:
                 successfully_posted = create_category(request_body)
+                if successfully_posted:
+                    return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
+
+        elif url["requested_resource"] == "posts":
+            if pk == 0:
+                successfully_posted = create_post(request_body)
                 if successfully_posted:
                     return self.response("", status.HTTP_201_SUCCESS_CREATED.value)
 
