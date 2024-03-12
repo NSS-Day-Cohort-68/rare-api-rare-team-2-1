@@ -20,6 +20,7 @@ from views import (
     get_all_posts_with_user_and_category,
     get_single_post,
     get_all_posts,
+    get_tags_by_post_id,
 )
 
 
@@ -81,9 +82,13 @@ class JSONServer(HandleRequests):
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         if url["requested_resource"] == "myposts":
-            response_body = get_posts_by_user_id(1)
+            response_body = get_posts_by_user_id(url["pk"])
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
+        if url["requested_resource"] == "tags":
+            if url["pk"] != 0:
+                response_body = get_tags_by_post_id(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
         if url["requested_resource"] == "categories":
             response_body = get_all_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
@@ -170,10 +175,10 @@ class JSONServer(HandleRequests):
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
                     )
-            return self.response(
-                "Requested resource not found",
-                status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
-            )
+                return self.response(
+                    "Requested resource not found",
+                    status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value,
+                )
 
     def do_PUT(self):
         """Handle PUT requests from a client"""
