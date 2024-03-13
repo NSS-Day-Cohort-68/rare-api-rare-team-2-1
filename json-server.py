@@ -23,6 +23,7 @@ from views import (
     get_all_posts,
     get_tags_by_post_id,
     get_all_tags,
+    delete_tag,
     update_tag,
 )
 
@@ -185,6 +186,14 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "posts":
             if pk != 0:
                 successfully_deleted = delete_post(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+        if url["requested_resource"] == "tags":
+            if pk != 0:
+                successfully_deleted = delete_tag(pk)
                 if successfully_deleted:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value

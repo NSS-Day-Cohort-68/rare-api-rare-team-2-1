@@ -82,6 +82,31 @@ def get_all_tags():
     return serialized_tags
 
 
+def delete_tag(pk):
+    """Deletes a tag from the database
+
+    Args:
+        tag id (primary key): The unique id of a tag
+
+    Returns:
+        No content
+    """
+    with sqlite3.connect("./db.sqlite3") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        # Write the SQL query to get the information you want
+        db_cursor.execute(
+            """
+        DELETE FROM Tags WHERE id = ?
+        """,
+            (pk,),
+        )
+        number_of_rows_deleted = db_cursor.rowcount
+
+    return True if number_of_rows_deleted > 0 else False
+
+
 def update_tag(id, tag_data):
     if not isinstance(tag_data, dict):
         raise ValueError("tag_data must be a dictionary")
