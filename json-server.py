@@ -24,6 +24,7 @@ from views import (
     get_tags_by_post_id,
     get_all_tags,
     delete_tag,
+    update_tag,
 )
 
 
@@ -216,6 +217,14 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "categories":
             if pk != 0:
                 successfully_updated = update_category(pk, request_body)
+                if successfully_updated:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+        if url["requested_resource"] == "tags":
+            if pk != 0:
+                successfully_updated = update_tag(pk, request_body)
                 if successfully_updated:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
