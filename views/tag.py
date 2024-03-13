@@ -80,3 +80,29 @@ def get_all_tags():
         serialized_tags = json.dumps(tags)
 
     return serialized_tags
+
+
+def update_tag(id, tag_data):
+    if not isinstance(tag_data, dict):
+        raise ValueError("tag_data must be a dictionary")
+
+    label = tag_data.get("label")
+    if label is None:
+        raise ValueError("tag_data must contain 'label' key")
+
+    with sqlite3.connect("./db.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            UPDATE Tags
+                SET
+                    label = ?
+            WHERE id = ?
+            """,
+            (label, id),
+        )
+
+        rows_affected = db_cursor.rowcount
+
+    return rows_affected > 0
