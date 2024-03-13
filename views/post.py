@@ -12,6 +12,7 @@ def get_all_posts():
         db_cursor.execute(
             """
         SELECT
+            p.id,
             p.title,
             p.publication_date,
             p.image_url,
@@ -26,6 +27,7 @@ def get_all_posts():
         posts = []
         for row in query_results:
             post = {
+                "id": row["id"],
                 "title": row["title"],
                 "publication_date": row["publication_date"],
                 "image_url": row["image_url"],
@@ -48,6 +50,7 @@ def get_posts_by_user_id(user_id):
         db_cursor.execute(
             """
         SELECT
+            p.id,
             p.title AS post_title,
             u.username AS author,
             c.label AS category
@@ -63,6 +66,7 @@ def get_posts_by_user_id(user_id):
         posts = []
         for row in query_results:
             post = {
+                "id": row["id"],
                 "title": row["post_title"],
                 "author": row["author"],
                 "category": row["category"],
@@ -115,6 +119,7 @@ def get_all_posts_with_user_and_category():
         db_cursor.execute(
             """
             SELECT
+                p.id,
                 p.title,
                 p.publication_date,
                 p.image_url,
@@ -132,6 +137,7 @@ def get_all_posts_with_user_and_category():
         posts = []
         for row in query_results:
             post = {
+                "id": row["id"],
                 "title": row["title"],
                 "author": row["author_username"],
                 "category": row["category_name"],
@@ -176,6 +182,7 @@ def create_post(post):
         id = db_cursor.lastrowid
 
         return json.dumps({"id": id})
+
 
 def update_post(post):
     """Updates a post in the database
