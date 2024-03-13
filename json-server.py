@@ -22,6 +22,7 @@ from views import (
     get_single_post,
     get_all_posts,
     get_tags_by_post_id,
+    get_all_tags,
 )
 
 
@@ -90,6 +91,9 @@ class JSONServer(HandleRequests):
             if url["pk"] != 0:
                 response_body = get_tags_by_post_id(url["pk"])
                 return self.response(response_body, status.HTTP_200_SUCCESS.value)
+            response_body = get_all_tags()
+            return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
         if url["requested_resource"] == "categories":
             response_body = get_all_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)

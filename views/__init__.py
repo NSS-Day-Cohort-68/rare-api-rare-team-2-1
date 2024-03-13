@@ -13,7 +13,6 @@ from .post import (
     get_all_posts_with_user_and_category,
     delete_post,
     create_post,
-
 )
 from .category import (
     create_category,
@@ -22,6 +21,6 @@ from .category import (
     update_category,
 )
 
-from .tag import create_tag, get_tags_by_post_id
+from .tag import create_tag, get_tags_by_post_id, get_all_tags
 from .comment import create_comment
 from .postTags import create_post_tags
