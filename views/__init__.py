@@ -21,6 +21,6 @@ from .category import (
     update_category,
 )
 
-from .tag import create_tag, get_tags_by_post_id, get_all_tags
+from .tag import create_tag, get_tags_by_post_id, get_all_tags, delete_tag
 from .comment import create_comment
 from .postTags import create_post_tags
