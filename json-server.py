@@ -26,6 +26,7 @@ from views import (
     delete_tag,
     update_tag,
     get_comments_by_post_id,
+    delete_comment,
 )
 
 
@@ -200,6 +201,14 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "tags":
             if pk != 0:
                 successfully_deleted = delete_tag(pk)
+                if successfully_deleted:
+                    return self.response(
+                        "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
+                    )
+
+        if url["requested_resource"] == "comments":
+            if pk != 0:
+                successfully_deleted = delete_comment(pk)
                 if successfully_deleted:
                     return self.response(
                         "", status.HTTP_204_SUCCESS_NO_RESPONSE_BODY.value
