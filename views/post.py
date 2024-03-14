@@ -135,13 +135,16 @@ def get_all_posts_with_user_and_category():
 
         posts = []
         for row in query_results:
+            category = {
+                "category_id": row["category_id"],
+                "category": row["category_name"],
+            }
             post = {
                 "id": row["id"],
                 "title": row["title"],
                 "author": row["author_username"],
-                "category_id": row["category_id"],
-                "category": row["category_name"],
                 "content": row["content"],
+                "category": category,
             }
             posts.append(post)
 
