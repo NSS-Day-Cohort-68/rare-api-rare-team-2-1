@@ -130,4 +130,10 @@ VALUES
 (2, 2, 'Title of Post 2', '2024-03-06', 'image2.jpg', 'Content of Post 2', true),
 (1, 1, 'Title of Post 3', '2024-03-06', 'image3.jpg', 'Content of Post 3', false);
 
-INSERT INTO Comments (post_id, author_id, content, created_on) VALUES (2, 1, 'Interesting read.', DATETIME('now'));
+INSERT INTO Comments (post_id, author_id, content, created_on) 
+VALUES 
+(1, 4, 'Interesting read.', DATETIME('now')), 
+(1, 5, 'Great post!', DATETIME('now', '-2 day')), 
+(2, 1, 'Nice!', DATETIME('now', '-1 day')), 
+(2, 2, 'Loved this!', DATETIME('now', '-3 day')), 
+(3, 3, 'Why?', DATETIME('now', '-1 day'));

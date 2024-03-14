@@ -25,6 +25,7 @@ from views import (
     get_all_tags,
     delete_tag,
     update_tag,
+    get_comments_by_post_id,
 )
 
 
@@ -99,6 +100,11 @@ class JSONServer(HandleRequests):
         if url["requested_resource"] == "categories":
             response_body = get_all_categories()
             return self.response(response_body, status.HTTP_200_SUCCESS.value)
+
+        if url["requested_resource"] == "comments":
+            if url["pk"] != 0:
+                response_body = get_comments_by_post_id(url["pk"])
+                return self.response(response_body, status.HTTP_200_SUCCESS.value)
 
         return self.response(
             "404", status.HTTP_404_CLIENT_ERROR_RESOURCE_NOT_FOUND.value
