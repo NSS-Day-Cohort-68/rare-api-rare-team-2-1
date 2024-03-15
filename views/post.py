@@ -124,6 +124,7 @@ def get_all_posts_with_user_and_category():
                 p.content,
                 p.approved,
                 u.username AS author_username,
+                c.id AS category_id,
                 c.label AS category_name
             FROM Posts p
             LEFT JOIN Users u ON p.user_id = u.id
@@ -134,12 +135,16 @@ def get_all_posts_with_user_and_category():
 
         posts = []
         for row in query_results:
+            category = {
+                "category_id": row["category_id"],
+                "category": row["category_name"],
+            }
             post = {
                 "id": row["id"],
                 "title": row["title"],
                 "author": row["author_username"],
-                "category": row["category_name"],
                 "content": row["content"],
+                "category": category,
             }
             posts.append(post)
 
@@ -205,6 +210,7 @@ def create_post(post):
         id = db_cursor.lastrowid
 
         return json.dumps({"id": id})
+
 
 def update_post(post):
     """Updates a post in the database
